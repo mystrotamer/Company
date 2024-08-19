@@ -42,15 +42,10 @@ def generate_fake_data(num_organizations, num_companies, num_departments, num_em
 
     return organizations
 
-def main():
-    # توليد بيانات وهمية
-    orgs = generate_fake_data(num_organizations=1,
-                              num_companies=5,
-                              num_departments=7,
-                              num_employees=20)
-
+def print_organization_details(organizations):
     # طباعة تفاصيل كل منظمة
-    for org in orgs:
+    print("Generated Data:")
+    for org in organizations:
         print(f"Organization: {org.name}")
         for company_name, company in org.companies.items():
             print(f"  Company: {company.name}")
@@ -59,5 +54,15 @@ def main():
                 for employee_name, employee in department.employees.items():
                     print(f"      Employee: {employee.name}, Salary: {employee.salary}")
 
+def add_data():
+    # توليد بيانات وهمية
+    orgs = generate_fake_data(num_organizations=2,
+                              num_companies=6,
+                              num_departments=24,
+                              num_employees=120)
+    return orgs
+
 if __name__ == "__main__":
-    main()
+    orgs = add_data()
+    print_organization_details(orgs)
+
