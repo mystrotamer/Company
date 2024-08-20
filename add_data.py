@@ -24,21 +24,27 @@ def generate_fake_data(num_organizations, num_companies, num_departments, num_em
 
     # إنشاء أقسام وهمية
     for _ in range(num_departments):
+        company_with_departments = [company for org in organizations for company in org.companies.values() if company]
+        if not company_with_departments:
+            print("No companies available to add departments.")
+            continue
         department = Department(fake.job())
         # إضافة القسم إلى شركة عشوائية
-        random.choice(list(random.choice(organizations).companies.values())).add_department(department)
+        random.choice(company_with_departments).add_department(department)
 
     # إنشاء موظفين وهميين
     for _ in range(num_employees):
+        company_with_departments = [company for org in organizations for company in org.companies.values() if company.departments]
+        if not company_with_departments:
+            print("No departments available to add employees.")
+            continue
         employee = Employee(fake.name(), fake.random_int(min=1850, max=7000))
         # اختيار شركة عشوائية
-        company = random.choice(list(random.choice(organizations).companies.values()))
-        # التحقق من أن الشركة تحتوي على أقسام قبل محاولة اختيار قسم
-        if company.departments:
-            # اختيار قسم عشوائي من الشركة
-            department = random.choice(list(company.departments.values()))
-            # إضافة الموظف إلى القسم
-            department.add_employee(employee)
+        company = random.choice(company_with_departments)
+        # اختيار قسم عشوائي من الشركة
+        department = random.choice(list(company.departments.values()))
+        # إضافة الموظف إلى القسم
+        department.add_employee(employee)
 
     return organizations
 
@@ -54,15 +60,9 @@ def print_organization_details(organizations):
                 for employee_name, employee in department.employees.items():
                     print(f"      Employee: {employee.name}, Salary: {employee.salary}")
 
-def add_data():
-    # توليد بيانات وهمية
-    orgs = generate_fake_data(num_organizations=2,
-                              num_companies=6,
-                              num_departments=24,
-                              num_employees=120)
-    return orgs
-
 if __name__ == "__main__":
-    orgs = add_data()
+    # توليد البيانات الوهمية
+    orgs = generate_fake_data(num_organizations=2, num_companies=2, num_departments=2, num_employees=2)
+    # طباعة التفاصيل
     print_organization_details(orgs)
 
